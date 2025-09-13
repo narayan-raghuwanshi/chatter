@@ -33,7 +33,7 @@ export const Sidebar: FC<Props> = ({ isSidebarOpen, setSidebarOpen }) => {
 
     return (
         <div
-            className={`bg-[#202123] flex flex-col flex-shrink-0 transition-all duration-300 ${isSidebarOpen ? "w-64" : "w-20"
+            className={`bg-[#181818] flex flex-col flex-shrink-0 transition-all duration-300 ${isSidebarOpen ? "w-64" : "w-20"
                 }`}
         >
             <div className="p-2 h-[72px]">

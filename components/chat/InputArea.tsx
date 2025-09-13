@@ -21,7 +21,7 @@ export const InputArea: FC<Props> = ({
     handleKeyDown,
 }) => (
     <div className="w-full max-w-3xl">
-        <div className="relative flex items-center bg-[#393a46] rounded-full px-4 py-3 shadow-sm border border-transparent focus-within:border-gray-600">
+        <div className="relative flex items-center bg-[#303030] rounded-full px-4 py-3 shadow-sm border border-transparent focus-within:border-gray-600">
             <button className="text-gray-400">
                 <Plus />
             </button>
@@ -41,8 +41,8 @@ export const InputArea: FC<Props> = ({
             <button
                 onClick={handleSend}
                 className={`p-2 rounded-full flex items-center justify-center ${input.trim() && !isWaitingForResponse
-                        ? "bg-white text-black"
-                        : "bg-transparent text-zinc-500 cursor-not-allowed"
+                    ? "bg-white text-black"
+                    : "bg-transparent text-zinc-500 cursor-not-allowed"
                     }`}
                 disabled={!input.trim() || isWaitingForResponse}
             >

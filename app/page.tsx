@@ -6,6 +6,7 @@ import { Sidebar } from "@/components/layout/Sidebar"
 import { Message } from "@/types/message"
 import { chat } from "@/actions/chat"
 import { readStreamableValue } from "@ai-sdk/rsc"
+import { ChevronDown } from "lucide-react"
 
 export default function App() {
   const [messages, setMessages] = useState<Message[]>([])
@@ -65,12 +66,12 @@ export default function App() {
   }
 
   return (
-    <div className="flex h-screen bg-zinc-900 text-white font-sans">
+    <div className="flex h-screen bg-[#212121] text-white font-sans">
       <Sidebar isSidebarOpen={isSidebarOpen} setSidebarOpen={setSidebarOpen} />
 
       <div className="flex-1 flex flex-col relative">
         <header className="absolute top-0 left-0 right-0 p-4 flex items-center justify-between z-10">
-          <h1 className="text-lg font-semibold">ChatGPT</h1>
+          <h1 className="text-xl flex gap-1 items-center">ChatGPT <ChevronDown size={20} /></h1>
           <div className="w-8"></div>
         </header>
 

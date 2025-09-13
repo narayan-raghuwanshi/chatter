@@ -2,7 +2,7 @@
 import { SignedIn, UserButton } from "@clerk/nextjs"
 
 export const SidebarUserSection = ({ isSidebarOpen }: { isSidebarOpen: boolean }) => (
-    <div className="p-2 border-t border-zinc-700">
+    <div className="p-2 border-zinc-700">
         <SignedIn>
             <div
                 className={`flex items-center gap-3 p-2 rounded-md hover:bg-zinc-700 w-full text-left text-sm cursor-pointer ${!isSidebarOpen ? "justify-center" : ""
