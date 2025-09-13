@@ -10,20 +10,20 @@ export const ChatMessage: FC<{ message: Message }> = ({ message }) => {
     const displayedText = isAssistant ? useTypingEffect(text, 20) : text
 
     const Icon = isAssistant ? (
-        <div className="w-8 h-8 bg-black text-white rounded-full flex items-center justify-center">
+        <div className="w-8 h-8 bg-black text-white rounded-full flex items-center justify-center flex-shrink-0">
             <GPTLogo className="w-5 h-5" />
         </div>
     ) : (
-        <div className="w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center">
+        <div className="w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center flex-shrink-0">
             <UserIcon />
         </div>
     )
 
     return (
-        <div className={`py-6 ${isAssistant ? "bg-zinc-700/50" : ""}`}>
-            <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 flex items-start space-x-4">
-                <div className="flex-shrink-0">{Icon}</div>
-                <div className="flex-grow pt-1 text-zinc-100 message-text">
+        <div className={`flex mx-8 md:mx-64 ${isAssistant ? "justify-start" : "justify-end"}`}>
+            <div className={`max-w-xl md:max-w-2xl py-3 px-4 my-2 rounded-full flex items-start gap-x-3 ${isAssistant ? "" : "bg-zinc-800"}`}>
+                {/* {Icon} */}
+                <div className="flex-grow text-zinc-100 message-text whitespace-pre-wrap">
                     {displayedText}
                     {!displayedText && isAssistant && <span className="animate-pulse">...</span>}
                 </div>
