@@ -5,9 +5,9 @@ import { Message } from "@/types/message"
 import { useTypingEffect } from "@/hooks/useTypingEffect"
 
 export const ChatMessage: FC<{ message: Message }> = ({ message }) => {
-    const { sender, text } = message
-    const isAssistant = sender === "assistant"
-    const displayedText = isAssistant ? useTypingEffect(text, 20) : text
+    const { role, content } = message
+    const isAssistant = role === "assistant"
+    const displayedText = isAssistant ? useTypingEffect(content, 5) : content
 
     const Icon = isAssistant ? (
         <div className="w-8 h-8 bg-black text-white rounded-full flex items-center justify-center flex-shrink-0">

@@ -4,6 +4,8 @@ import { ChatMessage } from "@/components/chat/ChatMessage"
 import { InputArea } from "@/components/chat/InputArea"
 import { Sidebar } from "@/components/layout/Sidebar"
 import { Message } from "@/types/message"
+import { chat } from "@/actions/chat"
+import { readStreamableValue } from "@ai-sdk/rsc"
 
 export default function App() {
   const [messages, setMessages] = useState<Message[]>([])
@@ -24,23 +26,36 @@ export default function App() {
     }
   }, [input])
 
-  const handleSend = useCallback(() => {
-    if (input.trim() && !isWaitingForResponse) {
-      const userMessage: Message = { sender: "user", text: input }
-      setMessages((prev) => [...prev, userMessage])
-      setInput("")
-      setIsWaitingForResponse(true)
+  const handleSend = async () => {
+    if (!input.trim() || isWaitingForResponse) return;
+    const userMessage: Message = { role: "user", content: input.trim() }
+    setInput("")
+    setIsWaitingForResponse(true)
+    setMessages((prev) => [...prev, userMessage])
 
-      setTimeout(() => {
-        const assistantResponse: Message = {
-          sender: "assistant",
-          text: "This is a high-fidelity replica of the ChatGPT interface. While the UI is fully interactive, the responses are simulated.",
-        }
-        setMessages((prev) => [...prev, assistantResponse])
-        setIsWaitingForResponse(false)
-      }, 500)
+    try {
+      const { newMessage } = await chat([...messages, userMessage]);
+      let textContent = "";
+      const assistantMessage: Message = { role: "assistant", content: "" };
+      setMessages((prev) => [...prev, assistantMessage]);
+
+      for await (const chunk of readStreamableValue(newMessage)) {
+        console.log("chunk:", chunk);
+        textContent += chunk;
+        assistantMessage.content = textContent;
+        setMessages((prev) => {
+          const updated = [...prev];
+          updated[updated.length - 1] = assistantMessage;
+          return updated;
+        });
+        setIsWaitingForResponse(false);
+      }
+
+    } catch (error) {
+      console.error("Error during chat:", error);
+      setMessages((prev) => [...prev, { role: "assistant", content: "Sorry, something went wrong. Please try again." }]);
     }
-  }, [input, isWaitingForResponse])
+  }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
