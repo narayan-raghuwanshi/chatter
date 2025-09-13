@@ -1,103 +1,98 @@
-import Image from "next/image";
+"use client"
+import { useState, useEffect, useRef, useCallback } from "react"
+import { ChatMessage } from "@/components/chat/ChatMessage"
+import { InputArea } from "@/components/chat/InputArea"
+import { Sidebar } from "@/components/layout/Sidebar"
+import { Message } from "@/types/message"
 
-export default function Home() {
+export default function App() {
+  const [messages, setMessages] = useState<Message[]>([])
+  const [input, setInput] = useState("")
+  const [isSidebarOpen, setSidebarOpen] = useState(true)
+  const [isWaitingForResponse, setIsWaitingForResponse] = useState(false)
+  const chatContainerRef = useRef<HTMLDivElement>(null)
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null)
+
+  useEffect(() => {
+    chatContainerRef.current?.scrollTo(0, chatContainerRef.current.scrollHeight)
+  }, [messages])
+
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto"
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`
+    }
+  }, [input])
+
+  const handleSend = useCallback(() => {
+    if (input.trim() && !isWaitingForResponse) {
+      const userMessage: Message = { sender: "user", text: input }
+      setMessages((prev) => [...prev, userMessage])
+      setInput("")
+      setIsWaitingForResponse(true)
+
+      setTimeout(() => {
+        const assistantResponse: Message = {
+          sender: "assistant",
+          text: "This is a high-fidelity replica of the ChatGPT interface. While the UI is fully interactive, the responses are simulated.",
+        }
+        setMessages((prev) => [...prev, assistantResponse])
+        setIsWaitingForResponse(false)
+      }, 500)
+    }
+  }, [input, isWaitingForResponse])
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault()
+      handleSend()
+    }
+  }
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="flex h-screen bg-zinc-900 text-white font-sans">
+      <Sidebar isSidebarOpen={isSidebarOpen} setSidebarOpen={setSidebarOpen} />
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+      <div className="flex-1 flex flex-col relative">
+        <header className="absolute top-0 left-0 right-0 p-4 flex items-center justify-between z-10">
+          <h1 className="text-lg font-semibold">ChatGPT</h1>
+          <div className="w-8"></div>
+        </header>
+
+        {messages.length === 0 ? (
+          <div className="flex-1 flex flex-col justify-center items-center text-center px-4">
+            <h2 className="text-3xl text-white mb-8">What's on your mind today?</h2>
+            <InputArea
+              input={input}
+              setInput={setInput}
+              isWaitingForResponse={isWaitingForResponse}
+              textareaRef={textareaRef}
+              handleSend={handleSend}
+              handleKeyDown={handleKeyDown}
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          </div>
+        ) : (
+          <>
+            <div ref={chatContainerRef} className="flex-1 overflow-y-auto pt-20 pb-40">
+              {messages.map((msg, index) => (
+                <ChatMessage key={index} message={msg} />
+              ))}
+            </div>
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-zinc-900 via-zinc-900 to-transparent">
+              <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pb-4">
+                <InputArea
+                  input={input}
+                  setInput={setInput}
+                  isWaitingForResponse={isWaitingForResponse}
+                  textareaRef={textareaRef}
+                  handleSend={handleSend}
+                  handleKeyDown={handleKeyDown}
+                />
+              </div>
+            </div>
+          </>
+        )}
+      </div>
     </div>
-  );
+  )
 }
