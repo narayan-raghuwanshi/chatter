@@ -36,7 +36,7 @@ export const Sidebar: FC<Props> = ({
 
     return (
         <div
-            className={`bg-[#181818] flex flex-col flex-shrink-0 transition-all duration-300 ${isSidebarOpen ? "w-64" : "w-16"}`}
+            className={`bg-[#181818] flex flex-col flex-shrink-0 transition-all duration-300 ${isSidebarOpen ? "w-56 md:wd-64" : "w-16"}`}
         >
             {/* Header */}
             <div className={`p-2 h-[72px] flex items-center ${isSidebarOpen ? "justify-between" : "justify-center"}`}>

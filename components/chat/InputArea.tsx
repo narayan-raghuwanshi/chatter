@@ -35,7 +35,7 @@ export const InputArea: FC<Props> = ({
                 rows={1}
                 disabled={isWaitingForResponse}
             />
-            <button className="text-gray-400 hover:text-white mr-2">
+            <button className="text-gray-400 hover:text-white mr-2 hidden md:inline-flex">
                 <Mic />
             </button>
             <button
