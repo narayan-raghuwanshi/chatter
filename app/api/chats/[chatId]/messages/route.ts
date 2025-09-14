@@ -4,9 +4,10 @@ import { Chat } from "@/models/Chat";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { chatId: string } }
+  { params }: { params: Promise<{ chatId: string }> }
 ) {
   await connectToDB();
+  console.log("Fetching messages for chatId:", params);
   const { chatId } = await params;
   const chat = await Chat.findById(chatId);
   if (!chat)
@@ -16,7 +17,7 @@ export async function GET(
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { chatId: string } }
+  { params }: { params: Promise<{ chatId: string }> }
 ) {
   await connectToDB();
   const { role, content } = await req.json();

@@ -19,24 +19,24 @@ export async function POST(req: NextRequest) {
 }
 
 // DELETE: delete a chat by ID
-export async function DELETE(
-  req: NextRequest,
-  { params }: { params: { chatId: string } }
-) {
-  await connectToDB();
-  const { chatId } = await params;
-  await Chat.findByIdAndDelete(chatId);
-  return NextResponse.json({ message: "Chat deleted" });
-}
+// export async function DELETE(
+//   req: NextRequest,
+//   context: { params: Promise<{ chatId: string[] }> }
+// ) {
+//   await connectToDB();
+//   const { chatId } = await context.params;
+//   await Chat.findByIdAndDelete(chatId);
+//   return NextResponse.json({ message: "Chat deleted" });
+// }
 
-// PATCH: update a chat by ID
-export async function PATCH(
-  req: NextRequest,
-  { params }: { params: { chatId: string } }
-) {
-  await connectToDB();
-  const { chatId } = await params;
-  const { title } = await req.json();
-  const chat = await Chat.findByIdAndUpdate(chatId, { title }, { new: true });
-  return NextResponse.json(chat);
-}
+// // PATCH: update a chat by ID
+// export default async function PATCH(
+//   req: NextRequest,
+//   context: { params: Promise<{ chatId: string[] }> }
+// ) {
+//   await connectToDB();
+//   const { chatId } = await context.params;
+//   const { title } = await req.json();
+//   const chat = await Chat.findByIdAndUpdate(chatId, { title }, { new: true });
+//   return NextResponse.json(chat);
+// }

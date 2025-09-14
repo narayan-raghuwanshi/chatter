@@ -153,7 +153,7 @@ export default function App() {
 
         {messages.length === 0 ? (
           <div className="flex-1 flex flex-col justify-center items-center text-center px-4">
-            <h2 className="text-3xl text-white mb-8">What's on your mind today?</h2>
+            <h2 className="text-3xl text-white mb-8">What&apos;s on your mind today?</h2>
             <InputArea
               input={input}
               setInput={setInput}
