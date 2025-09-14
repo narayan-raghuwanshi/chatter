@@ -7,7 +7,7 @@ export const useTypingEffect = (text: string, speed: number = 50) => {
   useEffect(() => {
     if (!text) return;
     setDisplayedText("");
-    let i = 0;
+    let i = -1;
     const intervalId = setInterval(() => {
       setDisplayedText((prev) => prev + text.charAt(i));
       i++;
